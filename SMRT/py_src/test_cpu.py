@@ -9,7 +9,7 @@ monitor CPU usage
 '''
 
 #############################################################
-#IMPORT MODULES
+# IMPORT MODULES
 #############################################################
 import os
 import sys
@@ -25,22 +25,22 @@ from datetime import datetime
 #############################################################
 def cpu_test(data_dirname):
 
-    #load inputs
+    # load inputs
     with open('data.json') as f:
         data = json.load(f)
     data_save_interval = data['data_save_interval']
     test_cycle_time = data['test_cycle_time']
 
-    #define vars
-    ttime=[]
-    upsets=[]
-    cpu_pct_used=[]
-    cpu_temp=[]
-    cpu_freq=[]
+    # define vars
+    ttime = []
+    upsets = []
+    cpu_pct_used = []
+    cpu_temp = []
+    cpu_freq = []
 
     print(str(time.time()) + ': starting CPU monitor!')
-    
-    #one day we might have user-configurable CPU usage here
+
+    # one day we might have user-configurable CPU usage here
 
     start = time.time()
     while True:
@@ -48,42 +48,45 @@ def cpu_test(data_dirname):
         time.sleep(test_cycle_time)
         end = time.time()
 
-        ttime+=[time.time()]
-        cpu_pct_used+=[psutil.cpu_percent()]
-        cpu_freq+=[psutil.cpu_freq(percpu=False)[0]] #NOTE that as of 12/2020 this is the rated val on windows, not current
-
+        ttime += [time.time()]
+        cpu_pct_used += [psutil.cpu_percent()]
+        # NOTE that as of 12/2020 this is the rated val on windows, not current
+        cpu_freq += [psutil.cpu_freq(percpu=False)[0]]
 
         if 'linux' in sys.platform:
-            cpu_temp+=[psutil.sensors_temperatures()['cpu-thermal'][0][1]]
-        else:
-            cpu_temp+=[9999] #TODO figure out how to do this on Windows
+            # cpu_temp+=[psutil.sensors_temperatures()['cpu-thermal'][0][1]]
 
+            # mod to make it work in ubuntu 20.04
+            cpu_temp += [psutil.sensors_temperatures()['nvme'][0].current]
+        else:
+            cpu_temp += [9999]  # TODO figure out how to do this on Windows
 
         if end-start > data_save_interval:
             time1 = time.time()
 
-            data = {'time':ttime,'cpu_pct_used':cpu_pct_used,'cpu_temp':cpu_temp,'cpu_freq':cpu_freq}
+            data = {'time': ttime, 'cpu_pct_used': cpu_pct_used,
+                    'cpu_temp': cpu_temp, 'cpu_freq': cpu_freq}
 
             now = str(datetime.now())
             now = now.split('.')
             now = now[0]
-            now = now.replace(' ','_')
-            now = now.replace(':','-')
+            now = now.replace(' ', '_')
+            now = now.replace(':', '-')
 
-            #write stuff
-            keys=sorted(data.keys())
-            with open(os.path.join(data_dirname, now+'cpu_log.csv'),'w', newline='') as csv_file:
-                 writer=csv.writer(csv_file)
-                 writer.writerow(keys)  
-                 writer.writerows(zip(*[data[key] for key in keys]))
+            # write stuff
+            keys = sorted(data.keys())
+            with open(os.path.join(data_dirname, now+'cpu_log.csv'), 'w', newline='') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(keys)
+                writer.writerows(zip(*[data[key] for key in keys]))
 
-            #reset vars
-            ttime=[]
-            cpu_temp=[]
-            cpu_pct_used=[]
-            cpu_freq=[]
+            # reset vars
+            ttime = []
+            cpu_temp = []
+            cpu_pct_used = []
+            cpu_freq = []
 
-            #reset time
+            # reset time
             start = time.time()
 
 
@@ -100,9 +103,5 @@ if __name__ == '__main__':
         pass
     else:
         os.makedirs(os.path.join(data_dirname))
-    #print(data_dirname)
+    # print(data_dirname)
     cpu_test(data_dirname)
-
-
-
-
