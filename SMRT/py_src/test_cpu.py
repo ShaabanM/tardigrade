@@ -54,10 +54,10 @@ def cpu_test(data_dirname):
         cpu_freq += [psutil.cpu_freq(percpu=False)[0]]
 
         if 'linux' in sys.platform:
-            # cpu_temp+=[psutil.sensors_temperatures()['cpu-thermal'][0][1]]
+            cpu_temp+=[psutil.sensors_temperatures()["coretemp"][0][1]]
 
             # mod to make it work in ubuntu 20.04
-            cpu_temp += [psutil.sensors_temperatures()['nvme'][0].current]
+            #cpu_temp += [psutil.sensors_temperatures()['nvme'][0].current]
         else:
             cpu_temp += [9999]  # TODO figure out how to do this on Windows
 
