@@ -21,6 +21,7 @@ from datetime import datetime
 from pySMART import Device
 
 device_name = "/dev/sdb"
+test_name = "evo"
 
 #############################################################
 # SUPPORT FUNCTIONS
@@ -30,6 +31,7 @@ def get_device_number(name):
     for i, disk in enumerate(disks):
         if name == disk.device:
             return i
+    raise ValueError('Device with the name ' + name + ' was not found') 
 
 def disk_test(data_dirname):
 
@@ -53,7 +55,7 @@ def disk_test(data_dirname):
 
     disks = psutil.disk_partitions()
     old_num_detected_disks = len(disks)
-    disk = Device("/dev/sdb")
+    disk = Device(device_name)
 
     # probably create list of drives here for data storage
 
@@ -93,7 +95,8 @@ def disk_test(data_dirname):
                 'disk_space_total': disk_space_total,
                 'disk_space_used': disk_space_used,
                 'disk_space_free':disk_space_free,
-                'temp':temp}
+                'temp':temp,
+                'info': disk_info}
 
             now = str(datetime.now())
             now = now.split('.')
@@ -103,7 +106,7 @@ def disk_test(data_dirname):
 
             # write stuff
             keys = sorted(data.keys())
-            with open(os.path.join(data_dirname, now+'disk_log.csv'), 'a', newline='') as csv_file:
+            with open(os.path.join(data_dirname, now+test_name +'_disk_log.csv'), 'a', newline='') as csv_file:
                 writer = csv.writer(csv_file)
                 writer.writerow(keys)
                 writer.writerows(zip(*[data[key] for key in keys]))
