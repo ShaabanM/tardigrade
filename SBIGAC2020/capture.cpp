@@ -4,8 +4,8 @@ using namespace std;
 
 // script parameters
 double exp_time = 0.1; // in seconds
-float tec_temp = -20;  // tec tempint fwpos = 1;
-string directory = "/home/luvs/SBIG-Dev/test_data_ajay/";
+float tec_temp = 20;   // tec tempint fwpos = 1;
+string directory = "data/";
 int read_mode = 1;
 
 string image_type = "dark";
@@ -13,98 +13,86 @@ string save_path = directory + image_type;
 
 int fwpos = 0;
 
-//const char *name = "test";
-double times[6] = {0.1, 1, 10, 30, 60, 100};
-float temps[7] = {0, 0, 0, 0, 0, 0, 0};
-//const char *name = image_type;
+double times[6] = {1, 10, 30, 60, 100, 300};
 
 int main(int argc, char *argv[])
 {
-	//std::cout << "Save path is: \n" << save_path;
-	// Establish gateway
-	auto pGateway = getGateway();
-
-	// Initialize the camera
-	auto pCamera = initCamera(pGateway);
-	// If initialization fails exit
-	if (pCamera == NULL)
-		return 1;
-
-	// Get camera
-	auto pSensor = pCamera->getSensor(0);
-
-	// force stop any ongoing exposure etc
-	handlePromise(pSensor->abortExposure());
-	setSubFrame(pSensor, pGateway);
-
-	// Print out the different read modes
-	auto read_modes = getReadoutModes(pSensor);
-	std::cout << "Readout modes are:\n"
-			  << read_modes << std::endl;
-
-	for (size_t i = 0; i < 7; i++)
+	for (size_t j = 0; j < 6; j++)
 	{
-		for (size_t j = 0; j < 6; j++)
+		exp_time = times[j];
+		//std::cout << "Save path is: \n" << save_path;
+		// Establish gateway
+		auto pGateway = getGateway();
+
+		// Initialize the camera
+		auto pCamera = initCamera(pGateway);
+		// If initialization fails exit
+		if (pCamera == NULL)
+			return 1;
+
+		// Get camera
+		auto pSensor = pCamera->getSensor(0);
+
+		// force stop any ongoing exposure etc
+		handlePromise(pSensor->abortExposure());
+		setSubFrame(pSensor, pGateway);
+
+		// Print out the different read modes
+		auto read_modes = getReadoutModes(pSensor);
+		std::cout << "Readout modes are:\n"
+				  << read_modes << std::endl;
+
+		tec_temp = tec_temp;
+
+		// Set TEC to desired temprature
+		setTECTemp(pCamera, tec_temp);
+
+		std::cout << "Exptime is: \n"
+				  << exp_time;
+
+		// wait for the camera to be ready to expose
+
+		do
 		{
-			exp_time = times[j];
-
-			for (size_t k = 0; k < 3; k++)
+			try
 			{
-				tec_temp = temps[i];
-
-				// Set TEC to desired temprature
-				setTECTemp(pCamera, tec_temp);
-
-				std::cout << "Exptime is: \n"
-						  << exp_time;
-
-				// wait for the camera to be ready to expose
-
-				do
-				{
-					try
-					{
-						handlePromise(pCamera->queryStatus());
-					}
-					catch (std::exception &ex)
-					{
-						std::cout << "Failed to query camera status: " << std::endl;
-						deleteGateway(pGateway);
-						throw(ex);
-					}
-
-					auto status = pCamera->getStatus();
-					if (status.mainSensorState == ISensor::Idle)
-						break;
-				} while (true);
-
-				expose(pCamera, pSensor, pGateway, exp_time, read_mode, fwpos);
-
-				//std::string fullPath = name;
-				std::string fullPath = save_path;
-				fullPath += std::to_string(k);
-				fullPath += "_";
-				fullPath += std::to_string(exp_time);
-				fullPath += "_";
-				fullPath += std::to_string(read_mode);
-				fullPath += "_";
-				fullPath += std::to_string(fwpos);
-				fullPath += "_";
-				fullPath += std::to_string(tec_temp);
-				fullPath += "_";
-				fullPath += std::to_string(std::time(0));
-				fullPath += ".fits";
-
-				auto PTEC = pCamera->getTEC();
-
-				downloadImageTo(fullPath.c_str(), pCamera, pSensor, pGateway, PTEC->getSensorThermopileTemperature(), PTEC->getHeatSinkThermopileTemperature());
+				handlePromise(pCamera->queryStatus());
 			}
-		}
+			catch (std::exception &ex)
+			{
+				std::cout << "Failed to query camera status: " << std::endl;
+				deleteGateway(pGateway);
+				throw(ex);
+			}
+
+			auto status = pCamera->getStatus();
+			if (status.mainSensorState == ISensor::Idle)
+				break;
+		} while (true);
+
+		expose(pCamera, pSensor, pGateway, exp_time, read_mode, fwpos);
+
+		//std::string fullPath = name;
+		std::string fullPath = save_path;
+		fullPath += std::to_string(exp_time);
+		fullPath += "_";
+		fullPath += std::to_string(read_mode);
+		fullPath += "_";
+		fullPath += std::to_string(fwpos);
+		fullPath += "_";
+		fullPath += std::to_string(tec_temp);
+		fullPath += "_";
+		fullPath += std::to_string(std::time(0));
+		fullPath += ".fits";
+
+		auto PTEC = pCamera->getTEC();
+
+		downloadImageTo(fullPath.c_str(), pCamera, pSensor, pGateway, PTEC->getSensorThermopileTemperature(), PTEC->getHeatSinkThermopileTemperature());
+
+		deleteGateway(pGateway);
+
+		return 0;
 	}
-
-	deleteGateway(pGateway);
-
-	return 0;
 }
 
 // Some Helper Functions
