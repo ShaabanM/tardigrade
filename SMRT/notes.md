@@ -1,5 +1,12 @@
 # SMRT Notes
 
+## Workflow (Repeat Before, During, After Beam)
+
+- This test will run on all beam computers are they are being beamed
+- Simply run `sudo python3 start_tests.py` on the intended machine
+  - note the code is not identical on all machines due to variblity in OS (Ubuntu 18 vs 20)
+- Run an rsync script that will in real time copy over the data from the machine being beamed to the support computer
+
 ## Installing SMRT
 
 - Begin by going to the setup dir and runing the install tool python script
