@@ -1,7 +1,5 @@
 
 import serial
-import datetime
-from datetime import timezone 
 import time
 import os
 import csv
@@ -9,11 +7,11 @@ import csv
 test_name = "usb2serial"
 
 # Set up serial ports
-inport = serial.Serial('/dev/ttyUSB0', 115200)
+inport = serial.Serial('/dev/ttyS1', 115200)
 outport = serial.Serial('/dev/ttyS0', 115200)
 
 # Set up frequency of test loop
-FREQ = 10 #Hz
+FREQ = 100 #Hz
 CYCLETIME = 1/FREQ *1000 #ms      
 first = True   
 
@@ -46,7 +44,10 @@ while 1:
         writer.writerows(zip(*[data[key] for key in keys]))
 
     # sleep to ensure total time is correct cadance
-    time.sleep((CYCLETIME - (now-start))/1000)
+    dt = (now-start)/1000
+    if dt < CYCLETIME:
+        print(dt)
+        time.sleep((CYCLETIME - dt))
 
 
 
