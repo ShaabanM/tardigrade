@@ -1,8 +1,8 @@
-
-
+int pwm_value;
 void setup()
 
 {
+
   pinMode(2, INPUT);
   pinMode(3, OUTPUT);
 
@@ -36,6 +36,7 @@ void loop()
   analogWrite(10, 200);
   analogWrite(11, 255);
 
+  // Get pulse lengths in micro seconds and spit them out to serial
   pwm_value = pulseIn(2, HIGH);
   Serial.println(pwm_value);
   pwm_value = pulseIn(4, HIGH);
@@ -48,4 +49,11 @@ void loop()
   Serial.println(pwm_value);
   pwm_value = pulseIn(12, HIGH);
   Serial.println(pwm_value);
+
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(A0);
+  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
+  float voltage = sensorValue * (5.0 / 1023.0);
+  // print out the value you read:
+  Serial.println(voltage);
 }
