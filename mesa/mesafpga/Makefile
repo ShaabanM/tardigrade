@@ -1,11 +1,6 @@
-CC = gcc 
-INCLUDE =  -I../mesaflash -Iinclude/ -I/usr/include  -I../mesafpga/include
-LIBS = -L/home/bit/mesaflash -lanyio -lpci -lm 
-
 loopback: 
-	${CC} loopback.c src/mesafpga.c  ${INCLUDE} ${LIBS} -o loopback
+	gcc loopback.c src/mesafpga.c -I../mesaflash -Iinclude/ -L../mesaflash -lm -lsocket -lanyio -o loopback
  
-
 all: loopback
 
 clean:
