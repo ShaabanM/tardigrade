@@ -20,8 +20,8 @@ import psutil
 from datetime import datetime
 from pySMART import Device
 
-device_name = "/dev/sdb"
-test_name = "evo"
+device_name = "/dev/sdc"
+test_name = "msata"
 
 #############################################################
 # SUPPORT FUNCTIONS
@@ -76,7 +76,7 @@ def disk_test(data_dirname):
         disk_space_used += [psutil.disk_usage(disks[idx][0])[1]]
         disk_space_free += [psutil.disk_usage(disks[idx][0])[2]]
         disk_space_used_pct += [psutil.disk_usage(disks[idx][0])[3]]
-        disk_info += [disks]
+        disk_info += [disks[idx]]
         temp += [disk.temperature]
 
         if num_detected_disks[-1] != old_num_detected_disks:
