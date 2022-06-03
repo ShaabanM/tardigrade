@@ -85,12 +85,12 @@ board_t * mesafpga_init(char * bitfile_name) {
   // IO23 = 1 << 23 = 0x00800000 - ClkEn0 => Output
 
   // set the outputs
-  reg = 0x00aaac01; 
+  reg = 0; //0x00aaac01; 
   mesafpga_write_reg(board, MESA_SET_OUTPUT_ADDR(MESA_P1_PIN0), reg);
   io_output_mask[MESA_P1_BANK] = reg;
 
   // clock enable is just setting the pin, so not a secondary function
-  reg = 0x002aa800; 
+  reg = 0;//0x002aa800; 
   mesafpga_write_reg(board, MESA_SET_ALTSRC_ADDR(MESA_P1_PIN0), reg);
   ssi_clk_enable_pin[3] = 0; 
   ssi_clk_enable_pin[0] = 23; 
@@ -100,7 +100,7 @@ board_t * mesafpga_init(char * bitfile_name) {
   io_invert_reg[MESA_P1_BANK] = reg;
 
   // set function mask so that secondary functions can't be tampered with
-  io_function_mask[MESA_P1_BANK] = 0x007ffffe; // all 24 io ports on the first header have secondary functions
+  io_function_mask[MESA_P1_BANK] = 0; // 0x007ffffe; // all 24 io ports on the first header have secondary functions
                                     // don't mask out clk enable/disable pins
 
   // set all other pins on the other headers (P3/P4) to outputs, non-inverted, no altsrc

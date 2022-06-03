@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     // set outputs
     for (int i = 24; i < 47; i++)
     {
-        mesafpga_set_io(mesa4i69, i, 0);
+        mesafpga_set_io(mesa4i69, i, 1);
     }
 
     int value = 0;
@@ -39,8 +39,9 @@ int main(int argc, char *argv[])
 
         for (int i = 0; i < 23; i++)
         {
-            printf("Port %d = %d", i, mesafpga_read_io(mesa4i69, i));
+            printf("Port %d = %d  ", i, mesafpga_read_io(mesa4i69, i));
         }
-        sleep(0.1);
+	printf("\n");
+        usleep(10000);
     }
 }

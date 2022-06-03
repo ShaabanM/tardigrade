@@ -1,5 +1,5 @@
 loopback: 
-	gcc loopback.c src/mesafpga.c -I../mesaflash -Iinclude/ -L../mesaflash -lm -lpci -lanyio -o loopback
+	gcc loopback.c src/mesafpga.c -I../mesaflash -Iinclude/ -lanyio -lpci -lm -o loopback
  
 all: loopback
 
