@@ -55,19 +55,6 @@ with open('data.json', 'w', encoding='utf-8') as f:
 with open(os.path.join(the_dir,'data.json'), 'w', encoding='utf-8') as f:
     json.dump(input_data, f, ensure_ascii=False, indent=4)
 
-
-#save off the code state
-home = os.getcwd()
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-git_show = str(subprocess.check_output(["git", "show"]))
-git_status = str(subprocess.check_output(["git", "status"]))
-git_dict = {'time':init_time,'git show':git_show,'git status':git_status}
-
-with open(os.path.join(the_dir,'git_status.json'),"w") as statfile:
-    json.dump(git_dict, statfile)
-
-os.chdir(home)
-
 #start logging processes
 subprocess.Popen([sys.executable,os.path.abspath('test_ram.py'),str(the_dir)], stdin=None, stdout=None, stderr=None)
 time.sleep(1)
