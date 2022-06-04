@@ -15,6 +15,7 @@ with image processing. This is illustrated in the OverlappedGrab sample program.
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
+#include <fitsio.h>
 
 #include <pylonc/PylonC.h>
 
@@ -33,6 +34,9 @@ void printErrorAndExit(GENAPIC_RESULT errc);
 /* Calculating the minimum and maximum gray value of an image buffer */
 void getMinMax(const unsigned char *pImg, int32_t width, int32_t height,
                unsigned char *pMin, unsigned char *pMax);
+
+// save image buffer to disk as fits file
+void saveImage(const char *filename, unsigned char *bufferData, int32_t width, int32_t height);
 
 int main(void)
 {
@@ -284,4 +288,23 @@ void pressEnterToExit(void)
     fprintf(stderr, "\nPress enter to exit.\n");
     while (getchar() != '\n')
         ;
+}
+
+void saveImage(const char *filename, unsigned char *bufferData, int32_t width, int32_t height)
+{
+    remove(filename); // Delete old file if it already exists
+
+    // create file
+    fitsfile *fptr;
+    int status = 0;
+    long naxes[2] = {width, height};
+
+    fits_create_file(&fptr, filename, &status);
+    fits_create_img(fptr, USHORT_IMG, 2, naxes, &status);
+
+    // write the image to the file
+    fits_write_img(fptr, TUSHORT, 1, width * height, bufferData, &status);
+
+    // close file
+    fits_close_file(fptr, &status);
 }
