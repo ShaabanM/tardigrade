@@ -25,10 +25,6 @@ with image processing. This is illustrated in the OverlappedGrab sample program.
     if (GENAPI_E_OK != errc) \
     printErrorAndExit(errc)
 
-// script parameters
-double exp_time = 100000; /* in microsecond */
-const int numGrabs = 10;  /* Number of images to grab. */
-
 /* This function can be used to wait for user input at the end of the sample program. */
 void pressEnterToExit(void);
 
@@ -42,7 +38,9 @@ void getMinMax(const unsigned char *pImg, int32_t width, int32_t height,
 
 void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, double exp_time);
 
-int main(void)
+#define NUM_GRABS_PER 2
+
+int main()
 {
     GENAPIC_RESULT res;       /* Return value of pylon methods. */
     size_t numDevices;        /* Number of available devices. */
@@ -131,9 +129,6 @@ int main(void)
         CHECK(res);
     }
 
-    /* Set the exposure time  */
-    res = PylonDeviceSetFloatFeature(hDev, "ExposureTime", exp_time);
-    CHECK(res);
 
     /* For GigE cameras, we recommend increasing the packet size for better
        performance. If the network adapter supports jumbo frames, set the packet
@@ -177,45 +172,52 @@ int main(void)
     }
 
     /* Grab some images in a loop. */
-    for (i = 0; i < numGrabs; ++i)
-    {
-        unsigned char min, max;
-        PylonGrabResult_t grabResult;
-        _Bool bufferReady;
-
-        /* Grab one single frame from stream channel 0. The
-        camera is set to single frame acquisition mode.
-        Wait up to 500 ms for the image to be grabbed. */
-        res = PylonDeviceGrabSingleFrame(hDev, 0, imgBuf, payloadSize,
-                                         &grabResult, &bufferReady, 500);
-        if (GENAPI_E_OK == res && !bufferReady)
-        {
-            /* Timeout occurred. */
-            printf("Frame %d: timeout\n", i + 1);
-        }
+    double exp_times[10] = {1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000};
+    for (int j = 0; j < 10; j++) {
+        /* Set the exposure time  */
+        res = PylonDeviceSetFloatFeature(hDev, "ExposureTime", exp_times[j]);
         CHECK(res);
 
-        /* Check to see if the image was grabbed successfully. */
-        if (grabResult.Status == Grabbed)
+        for (i = 0; i < NUM_GRABS_PER; i++)
         {
-            // generate image name
-            char fullPath[256];
-            snprintf(fullPath, 256, "data/frame_%f_%ld.fits", exp_time, time(0));
+            unsigned char min, max;
+            PylonGrabResult_t grabResult;
+            _Bool bufferReady;
 
-            // Save image
-            saveImage(fullPath, imgBuf, grabResult.SizeX, grabResult.SizeY, exp_time);
-            printf("Grabbed frame %ld", time(0));
-
-#ifdef GENAPIC_WIN_BUILD
-            /* Display image */
-            res = PylonImageWindowDisplayImageGrabResult(0, &grabResult);
+            /* Grab one single frame from stream channel 0. The
+            camera is set to single frame acquisition mode.
+            Wait up to 500 ms for the image to be grabbed. */
+            res = PylonDeviceGrabSingleFrame(hDev, 0, imgBuf, payloadSize,
+                                             &grabResult, &bufferReady, 2000);
+            if (GENAPI_E_OK == res && !bufferReady)
+            {
+                /* Timeout occurred. */
+                printf("Frame %d: timeout\n", i + 1);
+            }
             CHECK(res);
-#endif
-        }
-        else if (grabResult.Status == Failed)
-        {
-            fprintf(stderr, "Frame %d wasn't grabbed successfully.  Error code = 0x%08X\n",
-                    i + 1, grabResult.ErrorCode);
+
+            /* Check to see if the image was grabbed successfully. */
+            if (grabResult.Status == Grabbed)
+            {
+                // generate image name
+                char fullPath[256];
+                snprintf(fullPath, 256, "data/frame_%.2fus_%d_%ld.fits", exp_times[j], i, time(0));
+
+                // Save image
+                saveImage(fullPath, imgBuf, grabResult.SizeX, grabResult.SizeY, exp_times[j]);
+                printf("Grabbed frame %d (exp time %f)\n", i, exp_times[j]);
+
+    #ifdef GENAPIC_WIN_BUILD
+                /* Display image */
+                res = PylonImageWindowDisplayImageGrabResult(0, &grabResult);
+                CHECK(res);
+    #endif
+            }
+            else if (grabResult.Status == Failed)
+            {
+                fprintf(stderr, "Frame %d wasn't grabbed successfully.  Error code = 0x%08X\n",
+                        i, grabResult.ErrorCode);
+            }
         }
     }
 

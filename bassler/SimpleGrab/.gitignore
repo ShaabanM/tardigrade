@@ -1,3 +1,4 @@
-*.o
-SimpleGrab
+data/
 *.swp
+SimpleGrab
+*.o

@@ -23,37 +23,22 @@
 
 #include "camera.h"
 
-HIDS cameraHandle = 1;  // set by ueyesetid
 
 int bufferNumber = 0;
 char* memory = NULL;
 char* waitingMem = NULL;
-
+int status; //variable to verify completion of methods
 IMAGE_FILE_PARAMS ImageFileParams;
 
-int status; //variable to verify completion of methods
-
-int load_camera();
-
-void init_camera() {
-  // load the camera parameters
-  load_camera();
-  // set exposure time min .03 ms, currently can't go above 150 but max should be 998 ms
-  double exposure = 300; // NOTE: test alternative values
-  status = is_Exposure(cameraHandle, IS_EXPOSURE_CMD_SET_EXPOSURE, (void * ) &exposure, sizeof(double));
+void set_camera_exposure(unsigned int cameraHandle, double exposure_time) {
+  status = is_Exposure(cameraHandle, IS_EXPOSURE_CMD_SET_EXPOSURE, (void * ) &exposure_time, sizeof(double));
   if (status != IS_SUCCESS) {
     printf("Set exposure time fails.\n");
   }
-  // sets save image params
-  ImageFileParams.pwchFileName = L"save1.bmp";
-  ImageFileParams.pnImageID = NULL;
-  ImageFileParams.ppcImageMem = NULL;
-  ImageFileParams.nQuality = 80;
-  ImageFileParams.nFileType = IS_IMG_BMP;
 }
 
 //sets starting values for certain camera atributes
-void set_camera_params(unsigned int cameraHandle) {
+void set_camera_params(HIDS cameraHandle) {
   /*int delay =*/ is_SetTriggerDelay(IS_GET_TRIGGER_DELAY, 0);
 
   status = is_SetHardwareGain(cameraHandle, 0, IS_IGNORE_PARAMETER, IS_IGNORE_PARAMETER, IS_IGNORE_PARAMETER);
@@ -122,8 +107,15 @@ void set_camera_params(unsigned int cameraHandle) {
   }
 }
 
-int load_camera(){
+HIDS init_camera(HIDS cameraHandle)
+{
 
+  // sets save image params
+  ImageFileParams.pwchFileName = L"save1.bmp";
+  ImageFileParams.pnImageID = NULL;
+  ImageFileParams.ppcImageMem = NULL;
+  ImageFileParams.nQuality = 80;
+  ImageFileParams.nFileType = IS_IMG_BMP;
   SENSORINFO sensorInfo;
   
   int status;  
@@ -194,17 +186,16 @@ int load_camera(){
     exit(2);
   }
   printf("Done initing camera\n");
-  return 1;
+  return cameraHandle;
 }
 
-int do_camera() {
+int do_camera(HIDS cameraHandle, float exposure_time, unsigned int image_id) {
   //double ra = all_astro_params.ra, dec = all_astro_params.dec, fr = all_astro_params.fr, ps = all_astro_params.ps;
   wchar_t filename[200] = L"";
 
   // set up time
   time_t seconds;
   struct tm * tm_info;
-  char datename[256];
 
   time(&seconds);
   tm_info = localtime(&seconds);
@@ -217,9 +208,12 @@ int do_camera() {
   }
 
   // names file with time
-  strftime(datename, sizeof(datename), "data/ueye_%Y-%m-%d_%H-%M-%S.bmp", tm_info);
+  char filepath[256];
+  char datename[256];
+  strftime(datename, sizeof(datename), "%Y-%m-%d_%H-%M-%S.bmp", tm_info);
+  sprintf(filepath, "data/ueye_%d_%fms_%s", image_id, exposure_time, datename);
 
-  swprintf(filename, 200, L"%s", datename);
+  swprintf(filename, 200, L"%s", filepath);
   ImageFileParams.pwchFileName = filename;
 
   // get the image from memory
@@ -235,7 +229,7 @@ int do_camera() {
     exit(2);
   }
 
-  printf("Saving to \"%s\"\n", datename);
+  printf("Saving to \"%s\"\n", filepath);
 
   return 1;
 
