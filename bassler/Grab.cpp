@@ -38,6 +38,14 @@ int main(int /*argc*/, char * /*argv*/[])
         // Print the model name of the camera.
         cout << "Using device " << camera.GetDeviceInfo().GetModelName() << endl;
 
+        // Determine the current exposure time
+        double d = camera.ExposureTime.GetValue();
+        // Set the exposure time mode to Standard
+        // NOTE: May not be available on all camera models
+        camera.ExposureTimeMode.SetValue(ExposureTimeMode_Standard);
+        // Set the exposure time to 3500 microseconds
+        camera.ExposureTime.SetValue(3500.0);
+
         // The parameter MaxNumBuffer can be used to control the count of buffers
         // allocated for grabbing. The default value of this parameter is 10.
         camera.MaxNumBuffer = 5;
@@ -46,16 +54,6 @@ int main(int /*argc*/, char * /*argv*/[])
         // The camera device is parameterized with a default configuration which
         // sets up free-running continuous acquisition.
         camera.StartGrabbing(c_countOfImagesToGrab);
-
-        // Set the exposure time
-        INodeMap &nodemap = camera.GetNodeMap();
-        // Determine the current exposure time
-        double d = CFloatParameter(nodemap, "ExposureTime").GetValue();
-        // Set the exposure time mode to Standard
-        // NOTE: May not be available on all camera models
-        CEnumParameter(nodemap, "ExposureTimeMode").SetValue("Standard");
-        // Set the exposure time
-        CFloatParameter(nodemap, "ExposureTime").SetValue(exp_time);
 
         // This smart pointer will receive the grab result data.
         CGrabResultPtr ptrGrabResult;
