@@ -90,9 +90,8 @@ int main(int argc, char *argv[])
 		downloadImageTo(fullPath.c_str(), pCamera, pSensor, pGateway, PTEC->getSensorThermopileTemperature(), PTEC->getHeatSinkThermopileTemperature());
 
 		deleteGateway(pGateway);
-
-		return 0;
 	}
+	return 0;
 }
 
 // Some Helper Functions
