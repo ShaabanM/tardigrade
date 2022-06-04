@@ -199,12 +199,12 @@ int main(void)
         if (grabResult.Status == Grabbed)
         {
             // generate image name
-            char fullPath[];
-            sprintf(fullPath, "data/frame_%d_%d.fits", exp_time, time(0));
+            char fullPath[256];
+            snprintf(fullPath, 256, "data/frame_%f_%ld.fits", exp_time, time(0));
 
             // Save image
-            saveImage(fullPath, imgBuf, grabResult.SizeX, pgrabResult.SizeY, exp_time);
-            printf("Grabbed frame %d", time(0));
+            saveImage(fullPath, imgBuf, grabResult.SizeX, grabResult.SizeY, exp_time);
+            printf("Grabbed frame %ld", time(0));
 
 #ifdef GENAPIC_WIN_BUILD
             /* Display image */
@@ -318,8 +318,8 @@ void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t
 
     // write some useful header info
     fits_write_key(fptr, TDOUBLE, "EXPTIME", &exp_time, "Exposure time [s]", &status);
-    long time = time(0);
-    fits_write_key(fptr, TLONG, "TIME", &time, "UNIX Time", &status);
+    long the_time = time(0);
+    fits_write_key(fptr, TLONG, "TIME", &the_time, "UNIX Time", &status);
 
     // close file
     fits_close_file(fptr, &status);
