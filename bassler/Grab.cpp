@@ -13,10 +13,10 @@ using namespace Pylon;
 // Namespace for using cout.
 using namespace std;
 
-void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, float exp_time);
+void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, double exp_time);
 
 // script parameters
-float exp_time = 100000;                           /* in microsecond */
+double exp_time = 100000;                          /* in microsecond */
 static const uint32_t c_countOfImagesToGrab = 100; /* Number of images to be grabbed */
 string directory = "data/";
 string image_type = "dark";
@@ -47,6 +47,12 @@ int main(int /*argc*/, char * /*argv*/[])
         // sets up free-running continuous acquisition.
         camera.StartGrabbing(c_countOfImagesToGrab);
 
+        // Set the exposure time
+        // Determine the current exposure time
+        double d = camera.ExposureTime.GetValue();
+        // Set the exposure time mode to Standard
+        // NOTE: May not be available on all camera models
+        camera.ExposureTimeMode.SetValue(ExposureTimeMode_Standard);
         // Set the exposure time
         camera.ExposureTime.SetValue(exp_time);
 
@@ -109,7 +115,7 @@ int main(int /*argc*/, char * /*argv*/[])
     return exitCode;
 }
 
-void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, float exp_time)
+void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, double exp_time)
 {
     remove(filename); // Delete old file if it already exists
 
