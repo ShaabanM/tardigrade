@@ -4,7 +4,7 @@ using namespace std;
 
 // script parameters
 double exp_time = 0.1; // in seconds
-float tec_temp = 20;   // tec tempint fwpos = 1;
+float tec_temp = 17;   // tec tempint fwpos = 1;
 string directory = "data/";
 int read_mode = 1;
 
