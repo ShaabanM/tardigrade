@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
 
         for (int i = 0; i < 23; i++)
         {
-            printf("Port %d = %d  ", i, mesafpga_read_io(mesa4i69, i));
+            printf("Port %d,%d \n", i, mesafpga_read_io(mesa4i69, i));
         }
-	printf("\n");
+        printf("\n");
         usleep(10000);
     }
 }

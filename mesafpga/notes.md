@@ -7,4 +7,4 @@
   - ensure that the ssd is safely out of the beam-line (VERY IMPORTANT)
 - Connect the mesa board to the PCM computer via PCI stack (should already be connected)
 - Compile by running `make clean all`
-- Run the test dumping the prints into a text file using `sudo ./loopback ALL_IO.bit > out.txt`
+- Run the test dumping the prints into a text file using `sudo ./loopback ALL_IO.bit > [test_name].csv`
