@@ -12,7 +12,7 @@ LD         := $(CC)
 CPPFLAGS   := $(shell $(PYLON_ROOT)/bin/pylon-config --cflags pylonc)
 CFLAGS     := #e.g., CFLAGS=-g -O0 for debugging
 LDFLAGS    := $(shell $(PYLON_ROOT)/bin/pylon-config --libs-rpath pylonc)
-LDLIBS     := $(shell $(PYLON_ROOT)/bin/pylon-config --libs pylonc)
+LDLIBS     := $(shell $(PYLON_ROOT)/bin/pylon-config --libs pylonc) -lcfitsio
 
 # Rules for building
 all: $(NAME)
