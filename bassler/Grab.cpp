@@ -1,6 +1,7 @@
 // Include files to use the pylon API.
 #include <pylon/PylonIncludes.h>
 #include <string>
+#include <fitsio.h>
 
 #ifdef PYLON_WIN_BUILD
 #include <pylon/PylonGUI.h>
