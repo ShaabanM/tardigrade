@@ -12,7 +12,7 @@ using namespace Pylon;
 // Namespace for using cout.
 using namespace std;
 
-void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, float ext_temp);
+void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, float exp_time);
 
 // script parameters
 float exp_time = 100000;                           /* in microsecond */
@@ -108,7 +108,7 @@ int main(int /*argc*/, char * /*argv*/[])
     return exitCode;
 }
 
-void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, float ext_temp)
+void saveImage(const char *filename, uint8_t *bufferData, int32_t width, int32_t height, float exp_time)
 {
     remove(filename); // Delete old file if it already exists
 
