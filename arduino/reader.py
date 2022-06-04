@@ -15,6 +15,7 @@ while 1:
 
     # write time and bytes to file
     now = time.time()
+    rbytes = rbytes.decode('utf-8')
 
     # [time, recieved]
     print(now, rbytes)
