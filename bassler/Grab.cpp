@@ -48,13 +48,14 @@ int main(int /*argc*/, char * /*argv*/[])
         camera.StartGrabbing(c_countOfImagesToGrab);
 
         // Set the exposure time
+        INodeMap &nodemap = camera.GetNodeMap();
         // Determine the current exposure time
-        double d = camera.ExposureTime.GetValue();
+        double d = CFloatParameter(nodemap, "ExposureTime").GetValue();
         // Set the exposure time mode to Standard
         // NOTE: May not be available on all camera models
-        camera.ExposureTimeMode.SetValue(ExposureTimeMode_Standard);
+        CEnumParameter(nodemap, "ExposureTimeMode").SetValue("Standard");
         // Set the exposure time
-        camera.ExposureTime.SetValue(exp_time);
+        CFloatParameter(nodemap, "ExposureTime").SetValue(exp_time);
 
         // This smart pointer will receive the grab result data.
         CGrabResultPtr ptrGrabResult;
