@@ -5,7 +5,10 @@
 - This test will run on all beam computers are they are being beamed
 - Simply run `sudo python3 py_src/start_tests.py` on the intended machine
   - note the code is not identical on all machines due to variblity in OS (Ubuntu 18 vs 20)
-- Run an rsync script that will in real time copy over the data from the machine being beamed to the support computer
+- Run `./rsync.sh [computer_name] > /dev/null 2>&1 &` to start rsync to support computer (stu/gse).
+  - computer_name = {stu, ark, pcm, rpi}
+  - This is run in the background, and only as a backup for local data
+  - To kill, run `sudo pkill inotifywait`
 - If the computer also has IO (e.g. raspberry pi) check relevant computer directory for more tests
 
 ## Installing SMRT
