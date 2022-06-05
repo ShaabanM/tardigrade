@@ -4,7 +4,7 @@ import time
 import os
 import csv
 
-test_name = "ard"
+test_name = "ard" + str(time.time())
 
 # Set up serial ports
 inport = serial.Serial('/dev/ttyACM0', 115200)
