@@ -1,0 +1,4 @@
+libanyio.a
+mesaflash
+pci_analog_write
+pci_encoder_read
