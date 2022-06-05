@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/home/luvs/anaconda3/bin/python3
 # -*- coding: utf-8 -*-
 
 '''
@@ -21,7 +21,7 @@ from datetime import datetime
 from pySMART import Device
 
 device_name = "/dev/sdb"
-test_name = "evo_pre"
+test_name = "pcie_pre"
 
 #############################################################
 # SUPPORT FUNCTIONS
