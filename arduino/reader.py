@@ -1,4 +1,4 @@
-
+#!/home/luvs/anaconda3/bin/python3
 import serial
 import time
 import os
