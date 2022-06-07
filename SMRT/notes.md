@@ -3,13 +3,40 @@
 ## Workflow (Repeat Before, During, After Beam)
 
 - This test will run on all beam computers are they are being beamed
-- Simply run `sudo python3 py_src/start_tests.py` on the intended machine
+  - Namely: pcm, rpi, ark
+
+### Pre-setup
+- Connect computer
+  - pcm: 5V power to power supply
+  - ark: 12V power to wall plug through adapter
+  - rpi: 5V USB power from STU/GSE ARK
+- Connect ethernet to Ethernet Switch
+  - pcm: Ethernet dongle (5x2 header to the right of the PCI bus)
+  - ark: Ethernet port 1 (ARK)
+  - rpi: Ethernet port (only 1)
+- Login to computer by name
+  - All computers have username sst, password sst (should be passwordless login)
+  - Name is simple pcm, ark, or rpi (all aliased in hosts from STU/GSE ARK)
+- Login to computer by name in another terminal
+  - Need at least 2 terminals for test
+- If the computer also has IO (e.g. pcm with mesafpga) check relevant directory for more setup.
+
+### Test
+- Simply enter the `py_src` directory and run `sudo python3 start_tests.py` on the intended machine
   - note the code is not identical on all machines due to variblity in OS (Ubuntu 18 vs 20)
-- Run `./rsync.sh [computer_name] > /dev/null 2>&1 &` to start rsync to support computer (stu/gse).
-  - computer_name = {stu, ark, pcm, rpi}
+- In a separate terminal:
+  - Run `./rsync.sh [computer_name] > /dev/null 2>&1 &` to start rsync to STU/GSE ARK.
   - This is run in the background, and only as a backup for local data
   - To kill, run `sudo pkill inotifywait`
-- If the computer also has IO (e.g. raspberry pi) check relevant computer directory for more tests
+- If the computer also has IO (e.g. pcm with mesafpga) check relevant directory for more tests.
+
+### Post-test
+- Stop test (Ctrl+C)
+- Stop any other tests specific to the computer
+- Stop background rsync (`sudo pkill inotifywait`)
+- Make sure to back up data from `./remotedata/` on STU/GSE ARK to personal laptop or hard drive
+  - e.g. `rsync -avP ./remotedata/ user@laptop:/path/to/backup`
+  - IMPORTANT: This is done from STU/GSE ARK regardless of computer being tested (due to rsync)
 
 ## Installing SMRT
 
