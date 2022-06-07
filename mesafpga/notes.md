@@ -2,9 +2,20 @@
 
 ## Workflow (Repeat Before, During, After Beam)
 
-- Note this test cannot be run independently from the PCM computer test
-  - connect pcm computer to power 5V and to the network using the ethernet dongle
-  - ensure that the ssd is safely out of the beam-line (VERY IMPORTANT)
+### Pre-test Setup
 - Connect the mesa board to the PCM computer via PCI stack (should already be connected)
-- Compile by running `make clean all`
-- Run the test dumping the prints into a text file using `sudo ./loopback ALL_IO.bit > [test_name].csv`
+- Connect PCM computer to 5V power supply and to the network using the ethernet dongle
+  - Ensure that the PCM ssd (NON BEAMLINE) is safely out of the beam-line (VERY IMPORTANT)
+- Note this test cannot be run independently from the PCM SMRT computer test.
+  - See `../SMRT/notes.md` for details on setting this up first.
+- Recompile (if necessary) by running `make clean all`.
+- Test the test program by running `sudo ./loopback ALL_IO.bit`
+  - This will program the FPGA and stream .csv data to terminal
+
+### Test
+- Run the test redirecting data stream to `./data/[test_name].csv`
+  - e.g. `sudo ./loopback ALL_IO.bit > ./data/[test_name].csv1
+
+### Post-test
+- Stop the loopback test (Ctrl+C)
+- Refer to SMRT for completing tests and backing up data

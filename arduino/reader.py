@@ -9,6 +9,7 @@ test_name = "ard" + str(time.time())
 # Set up serial ports
 inport = serial.Serial('/dev/ttyACM0', 115200)
 first=True
+inport.reset_input_buffer()
 
 while 1:
     rbytes = inport.readline()
