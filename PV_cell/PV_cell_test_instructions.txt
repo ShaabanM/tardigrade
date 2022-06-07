@@ -1,0 +1,10 @@
+PV cell test instructions
+
+Place PV cell in beam line mount with tie wraps
+Attached red & black wires to digilent oscilloscope
+verify that voltage is being produced by ambient light and is a stable signal.
+start digilent wavforms software and run project "waveforms_PV_project.dwf3scope" in this folder
+Press "Run"
+Start beam. 
+When complete, press "Stop" and export data to csv file in this folder, with a new date_name.
+
