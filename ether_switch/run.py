@@ -56,9 +56,9 @@ with open(os.path.join(the_dir,'data.json'), 'w', encoding='utf-8') as f:
     json.dump(input_data, f, ensure_ascii=False, indent=4)
 
 #start logging processes
-
 subprocess.Popen([sys.executable,os.path.abspath('test_networks.py'),str(the_dir)], stdin=None, stdout=None, stderr=None)
-subprocess.run(["bash", "ping_test.sh"])
+subprocess.Popen(["bash", "ping_test.sh"],stdin=None, stdout=None, stderr=None)
+
 
 
 while True:
