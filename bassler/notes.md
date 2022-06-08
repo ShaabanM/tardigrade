@@ -13,7 +13,8 @@
   - Script only takes a few seconds to run; there is no continuous script during test.
 
 ### Optional monitoring
-- TBD GUI
+- During beamline test, if desired, frames can be observed and recorded using `./pylonviewer`
+  - Must be SSH'd into STU/GSE ARK with `-YC` (e.g. `ssh luvs@stu -YC`) for GUI access
 
 ### Post-test
 - Make a new directory in `./data` for the current data: `mkdir data/[descriptive name w/ date]`
