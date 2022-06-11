@@ -295,9 +295,9 @@ void getMinMax(const unsigned char *pImg, int32_t width, int32_t height,
     *pMax = max;
 }
 
-/* This function can be used to wait for user input at the end of the sample program. */
 void pressEnterToExit(void)
 {
+    return;
     fprintf(stderr, "\nPress enter to exit.\n");
     while (getchar() != '\n')
         ;

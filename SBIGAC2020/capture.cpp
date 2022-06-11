@@ -4,7 +4,7 @@ using namespace std;
 
 // script parameters
 double exp_time = 0.1; // in seconds
-float tec_temp = 17;   // tec tempint fwpos = 1;
+float tec_temp = 15;   // tec tempint fwpos = 1;
 string directory = "data/";
 int read_mode = 1;
 
@@ -13,11 +13,11 @@ string save_path = directory + image_type;
 
 int fwpos = 0;
 
-double times[6] = {1, 10, 30, 60, 100, 300};
+double times[7] = {0.1,1, 10, 30, 60, 100, 300};
 
 int main(int argc, char *argv[])
 {
-	for (size_t j = 0; j < 6; j++)
+	for (size_t j = 0; j < 7; j++)
 	{
 		exp_time = times[j];
 		//std::cout << "Save path is: \n" << save_path;

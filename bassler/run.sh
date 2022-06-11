@@ -10,4 +10,5 @@ do
    echo "index "$i   
    ./SimpleGrab
    echo "done"
+   sleep 10
 done

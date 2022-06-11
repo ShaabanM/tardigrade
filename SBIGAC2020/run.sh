@@ -3,7 +3,7 @@
 make clean
 make
 
-for i in {1..1}
+for i in {1..10}
 do
    echo "*****************"	
    echo	
