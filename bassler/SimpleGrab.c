@@ -92,10 +92,10 @@ int main()
     }
 
     /* Set the pixel format to Mono8 if available, where gray values will be output as 8 bit values for each pixel. */
-    isAvail = PylonDeviceFeatureIsAvailable(hDev, "EnumEntry_PixelFormat_Mono8");
+    isAvail = PylonDeviceFeatureIsAvailable(hDev, "EnumEntry_PixelFormat_Mono12");
     if (isAvail)
     {
-        res = PylonDeviceFeatureFromString(hDev, "PixelFormat", "Mono8");
+        res = PylonDeviceFeatureFromString(hDev, "PixelFormat", "Mono12");
         CHECK(res);
     }
 
