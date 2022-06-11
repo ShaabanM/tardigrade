@@ -7,10 +7,12 @@
   - This sets up data and power.
 
 ### Test
-- Test is run by simply running `./SimpleGrab` on STU/GSE ARK
+- Test is run by simply running `sudo ./run.sh > data/[name of test.log] 2>&1 &` on STU/GSE ARK
   - This tests at 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 ms exposure times (2 exposures each)
   - One file per exposure is written to disk in `./data` with exposure time, frame num, date
   - Script only takes a few seconds to run; there is no continuous script during test.
+  - Can check on tests with `tail -f data/[name of test].log`
+- Stop test with `sudo pkill run.sh`
 
 ### Optional monitoring
 - During beamline test, if desired, frames can be observed and recorded using `./pylonviewer`
