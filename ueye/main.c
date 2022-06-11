@@ -18,6 +18,7 @@ int main(int argc, char * argv[]) {
             do_camera(camera_id, exp_times[i], j);
         }
     }
+    close_camera(camera_id);
 
     printf("Done\n");
 }

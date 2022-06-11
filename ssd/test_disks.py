@@ -20,8 +20,8 @@ import psutil
 from datetime import datetime
 from pySMART import Device
 
-device_name = "/dev/sdb"
-test_name = "pcie_pre"
+device_name = "/dev/sdd"
+test_name = "evo_pre"
 
 #############################################################
 # SUPPORT FUNCTIONS

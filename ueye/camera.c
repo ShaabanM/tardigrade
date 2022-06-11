@@ -124,6 +124,7 @@ HIDS init_camera(HIDS cameraHandle)
   // initialize camera
   if ((status = is_InitCamera(&cameraHandle, NULL)) != IS_SUCCESS){
     printf("Camera initialization failed\n");
+    close_camera(cameraHandle);
     exit(2);
   }
   
@@ -233,4 +234,10 @@ int do_camera(HIDS cameraHandle, float exposure_time, unsigned int image_id) {
 
   return 1;
 
+}
+void close_camera(HIDS cameraHandle) {
+  if ((status = is_ExitCamera(cameraHandle)) != IS_SUCCESS){
+    printf("Camera initialization failed\n");
+    exit(2);
+  }
 }
