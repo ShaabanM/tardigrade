@@ -13,7 +13,9 @@ string save_path = directory + image_type;
 
 int fwpos = 0;
 
-double times[7] = {0.1,1, 10, 30, 60, 100, 300};
+double times[7] = {0.1, 1, 10, 30, 60, 100, 300};
+
+//double times[7] = {0.1,0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
 
 int main(int argc, char *argv[])
 {
@@ -334,6 +336,8 @@ void downloadImageTo(const char *path, ICameraPtr pCamera, ISensorPtr pSensor, I
 	auto info = pSensor->getInfo();
 	long bufferLength = info.pixelsX * info.pixelsY;
 	unsigned short *pBuffer = new unsigned short[bufferLength];
+
+	std::cout << pBuffer << std::endl;
 	copyImageBuffer(pSensor, pBuffer, bufferLength);
 
 	saveImage(pCamera, path, pBuffer, info.pixelsX, info.pixelsY, int_temp, ext_temp);

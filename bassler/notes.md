@@ -12,7 +12,7 @@
   - One file per exposure is written to disk in `./data` with exposure time, frame num, date
   - Script only takes a few seconds to run; there is no continuous script during test.
   - Can check on tests with `tail -f data/[name of test].log`
-- Stop test with `sudo pkill run.sh`
+- Stop test with `sudo pkill run_basler.sh`
 
 ### Optional monitoring
 - During beamline test, if desired, frames can be observed and recorded using `./pylonviewer`

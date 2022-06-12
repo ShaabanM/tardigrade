@@ -10,5 +10,5 @@ do
    echo "index "$i   
    ./test_ueye
    echo "done"
-   sleep 10 
+   sleep 15 
 done
